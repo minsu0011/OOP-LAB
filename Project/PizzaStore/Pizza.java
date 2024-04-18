@@ -1,6 +1,6 @@
 public class Pizza {
 
-    private int size; //pizza 변수설정
+    private int size; //pizza 필드설정
     private boolean hasPeperoni;
     private boolean hasMushrooms;
     private boolean hasCheese;
@@ -12,7 +12,7 @@ public class Pizza {
         this.hasCheese = hasCheese;
     }
 
-    public int getSize(){ // private변수에 접근하기위한 getter 설정 이번 과제에서는 사용하지 않음
+    public int getSize(){ // private변수에 접근하기위한 getter 설정
         return size;
     }
     public boolean getHasPeperoni(){
@@ -25,24 +25,15 @@ public class Pizza {
         return hasCheese;
     }
 
-
-
-    public String toString(){ // 사이즈, 재료들 리턴
-        String result = "size : " + Integer.toString(size);
-        result = result + " Ingredients : ";
-        if(hasPeperoni == true) result = result + "1 peperoni ";
-        else {
-            result = result + "0 peperoni ";
-        }
-        if(hasMushrooms == true) result = result + "1 mushroom ";
-        else{
-            result = result + "0 mushroom ";
-        }
-        if(hasCheese == true) result = result + "1 cheese ";
-        else{
-            result = result + "0 cheese ";
-        }
-        result = result + "Price : " + Double.toString(getPrice());
+    public String toString(){ // 사이즈, 재료들, 가격 String 리턴
+        String result = Integer.toString(size) + "cm, peperoni: ";
+        if(hasPeperoni == true) result = result + "yes, mushrooms: ";
+        else result = result + "no, mushrooms: ";
+        if(hasMushrooms == true) result = result + "yes, cheese: ";
+        else result = result + "no, cheese: ";
+        if(hasCheese == true) result = result + "yes, $";
+        else result = result + "no, $";
+        result = result + Double.toString(getPrice());
         return result;
     }
     

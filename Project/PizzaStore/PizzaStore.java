@@ -1,16 +1,27 @@
 import java.util.Scanner;
 
 public class PizzaStore {
-    private double cash = 2.5;
+    private double cash;
     private Order currentOrder;
-    private int peperoniStock = 1;
-    private int mushroomStock = 1;
-    private int cheeseStock = 1;
+    private int peperoniStock;
+    private int mushroomStock;
+    private int cheeseStock;
+    private int tableNumber = 0; // main method에서 제어하는 tableNumber 필드
+    private String address; // main method에서 입력받은 address 정보 임시 저장 필드
 
-    public PizzaStore(){} // 생성자
-    public void createOrder(int pizzaSize, boolean hasPeperoni, boolean hasMushrooms, boolean hasCheese){
-        currentOrder = new Order(); // 새로운 Order 생성
-        currentOrder.addPizza(pizzaSize, hasPeperoni, hasMushrooms, hasCheese);
+    public PizzaStore(){ // 생성자, 각 필드값 초기화
+        this.cash = 2.5;
+        this.peperoniStock = 1;
+        this.mushroomStock = 1;
+        this.cheeseStock = 1;
+    }
+    public void createOrder(String type){
+        if(type == "InStore") currentOrder = new InStoreOrder(++tableNumber); // InStore일때 새로운 order를 instoreorder로 생성(tableNumber 자동배정)
+        if(type == "Online") currentOrder = new OnlineOrder(address); // Online일때 새로운 order를 onlineorder로 생성(전에 입력받은 address값 사용)
+    }
+    public void AddPizzaToOrder(int size, boolean hasPeperoni, boolean hasMushrooms, boolean hasCheese){
+        Pizza pizza = new Pizza(size, hasPeperoni, hasMushrooms, hasCheese); // 새로운 피자 할당
+        currentOrder.addPizza(pizza); // order에 피자 추가
     }
     public void restockPeperoni(int amount){
         cash = cash - amount * 1; // 1달러차감
@@ -24,53 +35,107 @@ public class PizzaStore {
         cash = cash - amount * 0.75; // 0.75달러 차감
         cheeseStock = cheeseStock + amount; // 재고추가
     }
-    public String toString(){ // 잔고와 재고상황 출력
-        String result = "cash : " + cash + " stock : " + Integer.toString(peperoniStock) + "peperonis " + Integer.toString(mushroomStock) + "mushrooms " + Integer.toString(cheeseStock) + "cheeses\n";
+    public String toString(){ // 잔고와 재고상황 출력 + Last Order가 있다면 출력
+        String result = "PizzaStore: cash: $" + cash + ", peperoni: " + Integer.toString(peperoniStock) + ", mushrooms: " + Integer.toString(mushroomStock) + ", cheese: " + Integer.toString(cheeseStock) + ".";
         if (currentOrder == null) return result; // Order가 없으면 그대로 리턴
-        else return (result + currentOrder.toString()); // Order가 있으면 Order 내용도 추가
+        else return (result + "\nLast Order : \n" + currentOrder.toString()); // Order가 있으면 Order 내용도 추가
     }
 
     public static void main(String[] args){
         PizzaStore pizzastore = new PizzaStore(); // pizzastore 인스턴스 생성
         Scanner scan = new Scanner(System.in); // scanner 인스턴스 생성
+        LOOPMAIN : // Order 생성, 재료 구매를 반복
         while(true){ // 작업을 계속 반복하기 위한 루프 (1, 2가 입력되지 않을시 루프 종료)
-            System.out.printf("PizzaStore: cash: $%.2f, peperoni: %d, mushrooms: %d, cheeses: %d.%n", pizzastore.cash, pizzastore.peperoniStock, pizzastore.mushroomStock, pizzastore.cheeseStock); // 잔고 및 재료 상황 출력
+            System.out.println(pizzastore.toString()); // 잔고 및 재료 상황 출력
             System.out.println("What would you like to do: ");
             System.out.println("1: place an order, 2: buy ingredients");
             String scan1 = scan.nextLine();
             if(scan1.equals("1")){ // 1이 입력되면
-                int s = 0; // 사이즈 선언후 0으로 초기화
-                boolean p = false; // 재료 boolean 변수 false로 초기화
-                boolean m = false;
-                boolean c = false;
-                System.out.println("What size pizza do you want?");
-                String scans = scan.nextLine();
-                s = Integer.parseInt(scans); // string to int
-                System.out.println("Do you want peperoni on your pizza? Y/N");
-                String scanp = scan.nextLine();
-                System.out.println("Do you want mushrooms on your pizza? Y/N");
-                String scanm = scan.nextLine();
-                System.out.println("Do you want cheese on your pizza? Y/N");
-                String scanc = scan.nextLine();
-                if(pizzastore.currentOrder != null){ // 오직 하나의 Order만 받음 + 아닐 시 에러메세지 출력
-                    System.out.println("Only 1 order allowed this time");
-                    continue;
+                System.out.println("What type of order?");
+                System.out.println("1: In Store, 2: Online, 3: Back.");
+                String scan2 = scan.nextLine();
+                if(scan2.equals("1")){
+                    System.out.println("Chosen: In Store");
+                    pizzastore.createOrder("InStore"); // order 생성
                 }
-                if(scanp.equals("y")){ 
-                	p = true; // 재료 추가 정보 저장
-                	pizzastore.peperoniStock --; // 재고에서 1개 삭제
+                else if(scan2.equals("2")){
+                    System.out.println("Chosen: Online");
+                    System.out.println("What is the delivery address?");
+                    pizzastore.address = scan.nextLine();
+                    pizzastore.createOrder("Online"); // order 생성
                 }
-                if(scanm.equals("y")) {
-                	m = true;
-                	pizzastore.mushroomStock --;
+                else continue LOOPMAIN; // 3 포함 다른 문자가 입력 되면 back to the LoopMain
+                
+                LOOP1 : // pizza생성 반복
+                while(true){
+                    int s = 0; // 사이즈 선언후 0으로 초기화
+                    boolean p = false; // 재료 boolean 변수 false로 초기화
+                    boolean m = false;
+                    boolean c = false;
+                    System.out.println("What size pizza do you want?");
+                    String scans = scan.nextLine();
+                    s = Integer.parseInt(scans); // string to int
+                    System.out.println("Do you want peperoni on your pizza? Y/N");
+                    String scanp = scan.nextLine();
+                    System.out.println("Do you want mushrooms on your pizza? Y/N");
+                    String scanm = scan.nextLine();
+                    System.out.println("Do you want cheese on your pizza? Y/N");
+                    String scanc = scan.nextLine();
+                    if(scanp.equals("y")){ 
+                	    p = true; // 재료 추가 정보 저장
+                	    pizzastore.peperoniStock --; // 재고에서 1개 삭제
+                    }
+                    if(scanm.equals("y")) {
+                	    m = true;
+                	    pizzastore.mushroomStock --;
+                    }
+                    if(scanc.equals("y")) {
+                	    c = true;
+                	    pizzastore.cheeseStock --;
+                    }
+                    pizzastore.AddPizzaToOrder(s, p, m, c);
+                    System.out.printf("Added: One %dcm pizza ",s); // 피자 추가 완료 문구 출력
+                    if(m == true || p == true || c == true) System.out.print("with"); // 하나라도 재료가 있으면 with 출력
+                    if(p == true){
+                        if(m == false && c == false) System.out.print(" peperoni"); // 페페로니가 마지막 재료이면 쉼표 출력 안함
+                        else System.out.print(" peperoni,"); // 뒤에 다른 재료도 있으면 쉼표 출력
+                    }
+                    if(m == true && c == false) System.out.print(" mushrooms"); // 치즈가 없으면 쉼표 출력 안함
+                    if(m == true && c == true) System.out.print(" mushrooms,"); // 치즈가 있으면 쉼표 출력
+                    if(c == true) System.out.print(" cheese");
+                    System.out.println("\nDo you want to order another pizza? (Y/N)");
+                    String scan3 = scan.nextLine();
+                    if(scan3.equals("y")) continue LOOP1; // 피자 생성으로 돌아감
+                    if(scan3.equals("n")) { // n이 입력되면
+                        LOOP2 : // Order 수정여부 반복
+                        while(true){
+                            System.out.println("Your final order is: ");
+                            System.out.println(pizzastore.currentOrder.toString()); // order 정보 출력
+                            System.out.println("Do you want to change your order? (Y/N)");
+                            String scancc = scan.nextLine();
+                            if(scancc.equals("y")){
+                                System.out.println("Waht do you want to do?");
+                                System.out.println("1: Add a pizza, 2: Remove a pizza, 3: Nothing.");
+                                String scan10 = scan.nextLine();
+                                if(scan10.equals("1")) continue LOOP1; // 피자 생성으로 돌아감
+                                if(scan10.equals("2")){
+                                    System.out.println("Which pizza do you want to remove?");
+                                    String scanrm = scan.nextLine();
+                                    pizzastore.currentOrder.removePizza(Integer.parseInt(scanrm) - 1); // 해당 index의 피자 삭제
+                                    continue LOOP2; // 추가 Order 수정 여부로 돌아감
+                                }
+                                else { // nothing이 입력되면 Order 수정 종료 및 확정 and 잔고에 추가 and LOOPMAIN으로 돌아감
+                                    pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // 피자팔아 번 돈 추가
+                                    break LOOP1;
+                                }
+                            }
+                            else{ // Order 수정 생각 없으면 Order 확정 및 잔고에 추가 and LOOPMAIN으로 돌아감 (break LOOP1)
+                                pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // 피자팔아 번 돈 추가
+                                break LOOP1;
+                            } 
+                        }
+                    }
                 }
-                if(scanc.equals("y")) {
-                	c = true;
-                	pizzastore.cheeseStock --;
-                }
-                pizzastore.createOrder(s, p, m, c);
-                pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // 피자팔아 번 돈 추가
-                System.out.println("Your total will be $" + Double.toString(pizzastore.currentOrder.calculateOrderPrice()) + "."); // 피자의 가격 출력
             }
             else if(scan1.equals("2")){ // 2가 입력되면
                 while(true){ // 재료 추가 작업을 반복하기 위한 루프(4 입력시 종료)
@@ -88,12 +153,10 @@ public class PizzaStore {
                     else {
                         System.out.println("no money!"); // 잔고가 부족하면 에러메세지 출력
                     }
-                    System.out.printf("PizzaStore: cash: $%.2f, peperoni: %d, mushrooms: %d, cheeses: %d.%n", pizzastore.cash, pizzastore.peperoniStock, pizzastore.mushroomStock, pizzastore.cheeseStock); //재료 구입 후, 재고 및 재료 잔고 출력
+                    System.out.println(pizzastore.toString()); //재료 구입 후, 재고 및 재료 잔고 출력
                 }
             }
-            else { // 1,2 이외의 것이 입력되면 루프 종료
-                break;
-            }
+            else break LOOPMAIN; // 1,2 이외의 것이 입력되면 루프 종료
         }
     }
 }
