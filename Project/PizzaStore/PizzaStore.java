@@ -6,70 +6,101 @@ public class PizzaStore {
     private int peperoniStock;
     private int mushroomStock;
     private int cheeseStock;
-    private int tableNumber = 0; // main method¿¡¼­ Á¦¾îÇÏ´Â tableNumber ÇÊµå
-    private String address; // main method¿¡¼­ ÀÔ·Â¹ŞÀº address Á¤º¸ ÀÓ½Ã ÀúÀå ÇÊµå
-
-    public PizzaStore(){ // »ı¼ºÀÚ, °¢ ÇÊµå°ª ÃÊ±âÈ­
-        this.cash = 2.5;
-        this.peperoniStock = 1;
-        this.mushroomStock = 1;
-        this.cheeseStock = 1;
+    private int tableNumber = 0; // main methodì—ì„œ ì œì–´í•˜ëŠ” tableNumber í•„ë“œ
+    private String address; // main methodì—ì„œ ì…ë ¥ë°›ì€ address ì •ë³´ ì„ì‹œ ì €ì¥ í•„ë“œ
+    public PizzaStore(double cash, int peperoniStock, int mushroomStock, int cheeseStock){ // ìƒì„±ì, ê° í•„ë“œê°’ ì´ˆê¸°í™”
+        this.cash = cash;
+        this.peperoniStock = peperoniStock;
+        this.mushroomStock = mushroomStock;
+        this.cheeseStock = cheeseStock;
     }
     public void createOrder(String type){
-        if(type == "InStore") currentOrder = new InStoreOrder(++tableNumber); // InStoreÀÏ¶§ »õ·Î¿î order¸¦ instoreorder·Î »ı¼º(tableNumber ÀÚµ¿¹èÁ¤)
-        if(type == "Online") currentOrder = new OnlineOrder(address); // OnlineÀÏ¶§ »õ·Î¿î order¸¦ onlineorder·Î »ı¼º(Àü¿¡ ÀÔ·Â¹ŞÀº address°ª »ç¿ë)
+        if(type == "InStore") currentOrder = new InStoreOrder(++tableNumber); // InStoreì¼ë•Œ ìƒˆë¡œìš´ orderë¥¼ instoreorderë¡œ ìƒì„±(tableNumber ìë™ë°°ì •)
+        if(type == "Online") currentOrder = new OnlineOrder(address); // Onlineì¼ë•Œ ìƒˆë¡œìš´ orderë¥¼ onlineorderë¡œ ìƒì„±(ì „ì— ì…ë ¥ë°›ì€ addressê°’ ì‚¬ìš©)
     }
     public void AddPizzaToOrder(int size, boolean hasPeperoni, boolean hasMushrooms, boolean hasCheese){
-        Pizza pizza = new Pizza(size, hasPeperoni, hasMushrooms, hasCheese); // »õ·Î¿î ÇÇÀÚ ÇÒ´ç
-        currentOrder.addPizza(pizza); // order¿¡ ÇÇÀÚ Ãß°¡
+        Pizza pizza = new Pizza(size, hasPeperoni, hasMushrooms, hasCheese); // ìƒˆë¡œìš´ í”¼ì í• ë‹¹
+        currentOrder.addPizza(pizza); // orderì— í”¼ì ì¶”ê°€
     }
     public void restockPeperoni(int amount){
-        cash = cash - amount * 1; // 1´Ş·¯Â÷°¨
-        peperoniStock = peperoniStock + amount; // Àç°íÃß°¡
+        cash = cash - amount * 1; // 1ë‹¬ëŸ¬ì°¨ê°
+        peperoniStock = peperoniStock + amount; // ì¬ê³ ì¶”ê°€
     }
     public void restockMushrooms(int amount){
-        cash = cash - amount * 1.50; // 1.5´Ş·¯ Â÷°¨
-        mushroomStock = mushroomStock + amount; // Àç°íÃß°¡
+        cash = cash - amount * 1.50; // 1.5ë‹¬ëŸ¬ ì°¨ê°
+        mushroomStock = mushroomStock + amount; // ì¬ê³ ì¶”ê°€
     }
     public void restockCheese(int amount){
-        cash = cash - amount * 0.75; // 0.75´Ş·¯ Â÷°¨
-        cheeseStock = cheeseStock + amount; // Àç°íÃß°¡
+        cash = cash - amount * 0.75; // 0.75ë‹¬ëŸ¬ ì°¨ê°
+        cheeseStock = cheeseStock + amount; // ì¬ê³ ì¶”ê°€
     }
-    public String toString(){ // ÀÜ°í¿Í Àç°í»óÈ² Ãâ·Â + Last Order°¡ ÀÖ´Ù¸é Ãâ·Â
+    public String toString(){ // ì”ê³ ì™€ ì¬ê³ ìƒí™© ì¶œë ¥ + Last Orderê°€ ìˆë‹¤ë©´ ì¶œë ¥
         String result = "PizzaStore: cash: $" + cash + ", peperoni: " + Integer.toString(peperoniStock) + ", mushrooms: " + Integer.toString(mushroomStock) + ", cheese: " + Integer.toString(cheeseStock) + ".";
-        if (currentOrder == null) return result; // Order°¡ ¾øÀ¸¸é ±×´ë·Î ¸®ÅÏ
-        else return (result + "\nLast Order : \n" + currentOrder.toString()); // Order°¡ ÀÖÀ¸¸é Order ³»¿ëµµ Ãß°¡
+        if (currentOrder == null) return result; // Orderê°€ ì—†ìœ¼ë©´ ê·¸ëŒ€ë¡œ ë¦¬í„´
+        else return (result + "\nLast Order : \n" + currentOrder.toString()); // Orderê°€ ìˆìœ¼ë©´ Order ë‚´ìš©ë„ ì¶”ê°€
     }
 
     public static void main(String[] args){
-        PizzaStore pizzastore = new PizzaStore(); // pizzastore ÀÎ½ºÅÏ½º »ı¼º
-        Scanner scan = new Scanner(System.in); // scanner ÀÎ½ºÅÏ½º »ı¼º
-        LOOPMAIN : // Order »ı¼º, Àç·á ±¸¸Å¸¦ ¹İº¹
-        while(true){ // ÀÛ¾÷À» °è¼Ó ¹İº¹ÇÏ±â À§ÇÑ ·çÇÁ (1, 2°¡ ÀÔ·ÂµÇÁö ¾ÊÀ»½Ã ·çÇÁ Á¾·á)
-            System.out.println(pizzastore.toString()); // ÀÜ°í ¹× Àç·á »óÈ² Ãâ·Â
+        String typeOfFile = null;
+        String fileLocation = null;
+        TXTHandler txthandler = null;
+        CSVHandler csvhandler = null;
+        Scanner scan = new Scanner(System.in); // scanner ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
+        System.out.println("What type of file do you want to use?");
+        System.out.println("1: CSV, 2: TXT");
+        scan.nextLine();
+        PizzaStore pizzastore;
+        LOOP3 :
+        while(true){
+            try{
+                System.out.println("What is the location of the file?");
+                fileLocation = scan.nextLine();
+                int periodLocation = fileLocation.lastIndexOf("."); // ë§ˆì§€ë§‰ . ì˜ index ìœ„ì¹˜ ì €ì¥
+                typeOfFile = fileLocation.substring(periodLocation + 1); // íŒŒì¼ì˜ í˜•ì‹ ì €ì¥(ex. txt)
+                if(typeOfFile.equals("txt")){ //txt
+                    txthandler = new TXTHandler(); // txt handler
+                    pizzastore = txthandler.InitPizzaStore(fileLocation); // pizzastore ê°ì²´ ìƒì„±
+                    if(pizzastore == null) continue LOOP3; // Exceptionì´ ë°œìƒ -> ë‹¤ì‹œ fileLocation ì…ë ¥ë°›ìŒ
+                    else break LOOP3;
+                }
+                else if(typeOfFile.equals("csv")){ // csv
+                    csvhandler = new CSVHandler(); // csv handler
+                    pizzastore = csvhandler.InitPizzaStore(fileLocation); // pizzastore ê°ì²´ ìƒì„±
+                    if(pizzastore == null) continue LOOP3; // Exception -> ë‹¤ì‹œ fileLocation ì…ë ¥ë°›ìŒ
+                    else break LOOP3;
+                }
+                else throw new Exception(); // txt í˜¹ì€ csvê°€ ì•„ë‹ˆë©´
+            } catch(Exception e){
+                System.out.println("File Type Error!");
+                continue LOOP3;
+            }
+        }
+        LOOPMAIN : // Order ìƒì„±, ì¬ë£Œ êµ¬ë§¤ë¥¼ ë°˜ë³µ
+        while(true){ // ì‘ì—…ì„ ê³„ì† ë°˜ë³µí•˜ê¸° ìœ„í•œ ë£¨í”„ (1, 2ê°€ ì…ë ¥ë˜ì§€ ì•Šì„ì‹œ ë£¨í”„ ì¢…ë£Œ)
+            System.out.println(pizzastore.toString()); // ì”ê³  ë° ì¬ë£Œ ìƒí™© ì¶œë ¥
             System.out.println("What would you like to do: ");
-            System.out.println("1: place an order, 2: buy ingredients");
+            System.out.println("1: place an order, 2: buy ingredients, 3: Save and quit");
             String scan1 = scan.nextLine();
-            if(scan1.equals("1")){ // 1ÀÌ ÀÔ·ÂµÇ¸é
+            if(scan1.equals("1")){ // 1ì´ ì…ë ¥ë˜ë©´
                 System.out.println("What type of order?");
                 System.out.println("1: In Store, 2: Online, 3: Back.");
                 String scan2 = scan.nextLine();
                 if(scan2.equals("1")){
                     System.out.println("Chosen: In Store");
-                    pizzastore.createOrder("InStore"); // order »ı¼º
+                    pizzastore.createOrder("InStore"); // order ìƒì„±
                 }
                 else if(scan2.equals("2")){
                     System.out.println("Chosen: Online");
                     System.out.println("What is the delivery address?");
                     pizzastore.address = scan.nextLine();
-                    pizzastore.createOrder("Online"); // order »ı¼º
+                    pizzastore.createOrder("Online"); // order ìƒì„±
                 }
-                else continue LOOPMAIN; // 3 Æ÷ÇÔ ´Ù¸¥ ¹®ÀÚ°¡ ÀÔ·Â µÇ¸é back to the LoopMain
+                else continue LOOPMAIN; // 3 í¬í•¨ ë‹¤ë¥¸ ë¬¸ìê°€ ì…ë ¥ ë˜ë©´ back to the LoopMain
                 
-                LOOP1 : // pizza»ı¼º ¹İº¹
+                LOOP1 : // pizzaìƒì„± ë°˜ë³µ
                 while(true){
-                    int s = 0; // »çÀÌÁî ¼±¾ğÈÄ 0À¸·Î ÃÊ±âÈ­
-                    boolean p = false; // Àç·á boolean º¯¼ö false·Î ÃÊ±âÈ­
+                    int s = 0; // ì‚¬ì´ì¦ˆ ì„ ì–¸í›„ 0ìœ¼ë¡œ ì´ˆê¸°í™”
+                    boolean p = false; // ì¬ë£Œ boolean ë³€ìˆ˜ falseë¡œ ì´ˆê¸°í™”
                     boolean m = false;
                     boolean c = false;
                     System.out.println("What size pizza do you want?");
@@ -77,86 +108,100 @@ public class PizzaStore {
                     s = Integer.parseInt(scans); // string to int
                     System.out.println("Do you want peperoni on your pizza? Y/N");
                     String scanp = scan.nextLine();
-                    System.out.println("Do you want mushrooms on your pizza? Y/N");
-                    String scanm = scan.nextLine();
                     System.out.println("Do you want cheese on your pizza? Y/N");
                     String scanc = scan.nextLine();
+                    System.out.println("Do you want mushrooms on your pizza? Y/N");
+                    String scanm = scan.nextLine();
                     if(scanp.equals("y")){ 
-                	    p = true; // Àç·á Ãß°¡ Á¤º¸ ÀúÀå
-                	    pizzastore.peperoniStock --; // Àç°í¿¡¼­ 1°³ »èÁ¦
-                    }
-                    if(scanm.equals("y")) {
-                	    m = true;
-                	    pizzastore.mushroomStock --;
+                	    p = true; // ì¬ë£Œ ì¶”ê°€ ì •ë³´ ì €ì¥
+                	    pizzastore.peperoniStock --; // ì¬ê³ ì—ì„œ 1ê°œ ì‚­ì œ
                     }
                     if(scanc.equals("y")) {
                 	    c = true;
                 	    pizzastore.cheeseStock --;
                     }
-                    pizzastore.AddPizzaToOrder(s, p, m, c);
-                    System.out.printf("Added: One %dcm pizza ",s); // ÇÇÀÚ Ãß°¡ ¿Ï·á ¹®±¸ Ãâ·Â
-                    if(m == true || p == true || c == true) System.out.print("with"); // ÇÏ³ª¶óµµ Àç·á°¡ ÀÖÀ¸¸é with Ãâ·Â
-                    if(p == true){
-                        if(m == false && c == false) System.out.print(" peperoni"); // ÆäÆä·Î´Ï°¡ ¸¶Áö¸· Àç·áÀÌ¸é ½°Ç¥ Ãâ·Â ¾ÈÇÔ
-                        else System.out.print(" peperoni,"); // µÚ¿¡ ´Ù¸¥ Àç·áµµ ÀÖÀ¸¸é ½°Ç¥ Ãâ·Â
+                    if(scanm.equals("y")) {
+                	    m = true;
+                	    pizzastore.mushroomStock --;
                     }
-                    if(m == true && c == false) System.out.print(" mushrooms"); // Ä¡Áî°¡ ¾øÀ¸¸é ½°Ç¥ Ãâ·Â ¾ÈÇÔ
-                    if(m == true && c == true) System.out.print(" mushrooms,"); // Ä¡Áî°¡ ÀÖÀ¸¸é ½°Ç¥ Ãâ·Â
+                    pizzastore.AddPizzaToOrder(s, p, m, c);
+                    System.out.printf("Added: One %dcm pizza ",s); // í”¼ì ì¶”ê°€ ì™„ë£Œ ë¬¸êµ¬ ì¶œë ¥
+                    if(m == true || p == true || c == true) System.out.print("with"); // í•˜ë‚˜ë¼ë„ ì¬ë£Œê°€ ìˆìœ¼ë©´ with ì¶œë ¥
+                    if(p == true){
+                        if(m == false && c == false) System.out.print(" peperoni"); // í˜í˜ë¡œë‹ˆê°€ ë§ˆì§€ë§‰ ì¬ë£Œì´ë©´ ì‰¼í‘œ ì¶œë ¥ ì•ˆí•¨
+                        else System.out.print(" peperoni,"); // ë’¤ì— ë‹¤ë¥¸ ì¬ë£Œë„ ìˆìœ¼ë©´ ì‰¼í‘œ ì¶œë ¥
+                    }
+                    if(m == true && c == false) System.out.print(" mushrooms"); // ì¹˜ì¦ˆê°€ ì—†ìœ¼ë©´ ì‰¼í‘œ ì¶œë ¥ ì•ˆí•¨
+                    if(m == true && c == true) System.out.print(" mushrooms,"); // ì¹˜ì¦ˆê°€ ìˆìœ¼ë©´ ì‰¼í‘œ ì¶œë ¥
                     if(c == true) System.out.print(" cheese");
                     System.out.println("\nDo you want to order another pizza? (Y/N)");
                     String scan3 = scan.nextLine();
-                    if(scan3.equals("y")) continue LOOP1; // ÇÇÀÚ »ı¼ºÀ¸·Î µ¹¾Æ°¨
-                    if(scan3.equals("n")) { // nÀÌ ÀÔ·ÂµÇ¸é
-                        LOOP2 : // Order ¼öÁ¤¿©ºÎ ¹İº¹
+                    if(scan3.equals("y")) continue LOOP1; // í”¼ì ìƒì„±ìœ¼ë¡œ ëŒì•„ê°
+                    if(scan3.equals("n")) { // nì´ ì…ë ¥ë˜ë©´
+                        LOOP2 : // Order ìˆ˜ì •ì—¬ë¶€ ë°˜ë³µ
                         while(true){
                             System.out.println("Your final order is: ");
-                            System.out.println(pizzastore.currentOrder.toString()); // order Á¤º¸ Ãâ·Â
+                            System.out.println(pizzastore.currentOrder.toString()); // order ì •ë³´ ì¶œë ¥
                             System.out.println("Do you want to change your order? (Y/N)");
                             String scancc = scan.nextLine();
                             if(scancc.equals("y")){
                                 System.out.println("Waht do you want to do?");
                                 System.out.println("1: Add a pizza, 2: Remove a pizza, 3: Nothing.");
                                 String scan10 = scan.nextLine();
-                                if(scan10.equals("1")) continue LOOP1; // ÇÇÀÚ »ı¼ºÀ¸·Î µ¹¾Æ°¨
+                                if(scan10.equals("1")) continue LOOP1; // í”¼ì ìƒì„±ìœ¼ë¡œ ëŒì•„ê°
                                 if(scan10.equals("2")){
                                     System.out.println("Which pizza do you want to remove?");
                                     String scanrm = scan.nextLine();
-                                    pizzastore.currentOrder.removePizza(Integer.parseInt(scanrm) - 1); // ÇØ´ç indexÀÇ ÇÇÀÚ »èÁ¦
-                                    continue LOOP2; // Ãß°¡ Order ¼öÁ¤ ¿©ºÎ·Î µ¹¾Æ°¨
+                                    pizzastore.currentOrder.removePizza(Integer.parseInt(scanrm) - 1); // í•´ë‹¹ indexì˜ í”¼ì ì‚­ì œ
+                                    continue LOOP2; // ì¶”ê°€ Order ìˆ˜ì • ì—¬ë¶€ë¡œ ëŒì•„ê°
                                 }
-                                else { // nothingÀÌ ÀÔ·ÂµÇ¸é Order ¼öÁ¤ Á¾·á ¹× È®Á¤ and ÀÜ°í¿¡ Ãß°¡ and LOOPMAINÀ¸·Î µ¹¾Æ°¨
-                                    pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // ÇÇÀÚÆÈ¾Æ ¹ø µ· Ãß°¡
+                                else { // nothingì´ ì…ë ¥ë˜ë©´ Order ìˆ˜ì • ì¢…ë£Œ ë° í™•ì • and ì”ê³ ì— ì¶”ê°€ and LOOPMAINìœ¼ë¡œ ëŒì•„ê°
+                                    pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // í”¼ìíŒ”ì•„ ë²ˆ ëˆ ì¶”ê°€
                                     break LOOP1;
                                 }
                             }
-                            else{ // Order ¼öÁ¤ »ı°¢ ¾øÀ¸¸é Order È®Á¤ ¹× ÀÜ°í¿¡ Ãß°¡ and LOOPMAINÀ¸·Î µ¹¾Æ°¨ (break LOOP1)
-                                pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // ÇÇÀÚÆÈ¾Æ ¹ø µ· Ãß°¡
+                            else{ // Order ìˆ˜ì • ìƒê° ì—†ìœ¼ë©´ Order í™•ì • ë° ì”ê³ ì— ì¶”ê°€ and LOOPMAINìœ¼ë¡œ ëŒì•„ê° (break LOOP1)
+                                pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // í”¼ìíŒ”ì•„ ë²ˆ ëˆ ì¶”ê°€
                                 break LOOP1;
                             } 
                         }
                     }
                 }
             }
-            else if(scan1.equals("2")){ // 2°¡ ÀÔ·ÂµÇ¸é
-                while(true){ // Àç·á Ãß°¡ ÀÛ¾÷À» ¹İº¹ÇÏ±â À§ÇÑ ·çÇÁ(4 ÀÔ·Â½Ã Á¾·á)
+            else if(scan1.equals("2")){ // 2ê°€ ì…ë ¥ë˜ë©´
+                while(true){ // ì¬ë£Œ ì¶”ê°€ ì‘ì—…ì„ ë°˜ë³µí•˜ê¸° ìœ„í•œ ë£¨í”„(4 ì…ë ¥ì‹œ ì¢…ë£Œ)
                     System.out.println("What ingredients do you want to buy?");
                     System.out.println("1: peperoni, 2: mushrooms, 3:cheese, 4: none");
                     String scani = scan.nextLine();
-                    if(scani.equals("1") && pizzastore.cash >= 1) // 1ÀÌ ÀÔ·ÂµÇ°í ÀÜ°í°¡ ³²¾ÆÀÖÀ¸¸é
+                    if(scani.equals("1") && pizzastore.cash >= 1) // 1ì´ ì…ë ¥ë˜ê³  ì”ê³ ê°€ ë‚¨ì•„ìˆìœ¼ë©´
                         pizzastore.restockPeperoni(1);
-                    else if(scani.equals("2") && pizzastore.cash >= 1.5) // 2°¡ ÀÔ·ÂµÇ°í ÀÜ°í°¡ ³²¾ÆÀÖÀ¸¸é
+                    else if(scani.equals("2") && pizzastore.cash >= 1.5) // 2ê°€ ì…ë ¥ë˜ê³  ì”ê³ ê°€ ë‚¨ì•„ìˆìœ¼ë©´
                         pizzastore.restockMushrooms(1);
-                    else if(scani.equals("3") && pizzastore.cash >= 0.75) // 3ÀÌ ÀÔ·ÂµÇ°í ÀÜ°í°¡ ³²¾ÆÀÖÀ¸¸é
+                    else if(scani.equals("3") && pizzastore.cash >= 0.75) // 3ì´ ì…ë ¥ë˜ê³  ì”ê³ ê°€ ë‚¨ì•„ìˆìœ¼ë©´
                         pizzastore.restockCheese(1);
-                    else if(scani.equals("4")) // 4°¡ ÀÔ·ÂµÇ¸é Á¾·á
+                    else if(scani.equals("4")) // 4ê°€ ì…ë ¥ë˜ë©´ ì¢…ë£Œ
                         break;
                     else {
-                        System.out.println("no money!"); // ÀÜ°í°¡ ºÎÁ·ÇÏ¸é ¿¡·¯¸Ş¼¼Áö Ãâ·Â
+                        System.out.println("no money!"); // ì”ê³ ê°€ ë¶€ì¡±í•˜ë©´ ì—ëŸ¬ë©”ì„¸ì§€ ì¶œë ¥
                     }
-                    System.out.println(pizzastore.toString()); //Àç·á ±¸ÀÔ ÈÄ, Àç°í ¹× Àç·á ÀÜ°í Ãâ·Â
+                    System.out.println(pizzastore.toString()); //ì¬ë£Œ êµ¬ì… í›„, ì¬ê³  ë° ì¬ë£Œ ì”ê³  ì¶œë ¥
                 }
             }
-            else break LOOPMAIN; // 1,2 ÀÌ¿ÜÀÇ °ÍÀÌ ÀÔ·ÂµÇ¸é ·çÇÁ Á¾·á
+            else if(scan1.equals("3")){ // Save and Quit
+                String text = null;
+                if(typeOfFile.equals("txt")){ // txt
+                    text = "Money;" + pizzastore.cash + "\r\nCheese;" + pizzastore.cheeseStock + "\r\nPeperoni;" + pizzastore.peperoniStock + "\r\nMushroom;" + pizzastore.mushroomStock; // txtí˜•ì‹ìœ¼ë¡œ text ì‘ì„±
+                    txthandler.writeToFile(fileLocation, text); // fileLocationì— text rewrite
+                }
+                else if(typeOfFile.equals("csv")){ // csv
+                    String t = Double.toString(pizzastore.cash);
+                    t = t.replace(".", ","); // 12.00 -> 12,00
+                    text = "Money,\"" + t + "\"\r\nMushroom," + pizzastore.mushroomStock + "\r\nPeperoni," + pizzastore.peperoniStock + "\r\nCheese," + pizzastore.cheeseStock; // csv í˜•ì‹ìœ¼ë¡œ text ì‘ì„±
+                    csvhandler.writeToFile(fileLocation, text); // fileLocationì— text rewrite
+                }
+                break LOOPMAIN; // program exit
+            }
+            else break LOOPMAIN; // 1, 2, 3 ì´ì™¸ì˜ ìˆ«ìê°€ ì…ë ¥ë˜ë©´ ì¢…ë£Œ
         }
     }
 }
