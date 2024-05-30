@@ -1,4 +1,4 @@
-package Practice.Abstract;
+package Abstract;
 import java.time.LocalDate;
 
 public class Bev extends Car{
