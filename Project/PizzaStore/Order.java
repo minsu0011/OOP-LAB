@@ -1,10 +1,13 @@
 public abstract class Order {
     private Pizza[] pizza; // 피자
-    int pizzaCount = 0; // 오더 당 피자 갯수(추가)
+    private static int orderIndex = 0;
+    private int pizzaCount = 0; // 오더 당 피자 갯수(추가)
     public Order(){} // 생성자
     public void addPizza(Pizza pizza){ 
         pizzaCount++; // 피자 개수 증가
         Pizza pizzaInput = new Pizza(pizza.getSize(), pizza.getHasPeperoni(), pizza.getHasMushrooms(), pizza.getHasCheese()); //추가할 피자 정보 임시 변수에 저장
+        pizzaInput.setPizzaIndex(pizzaCount); // pizzaIndex 설정
+        pizzaInput.setOrderIndex(orderIndex + 1); // orderIndex 설정
         if(pizzaCount == 1){ // 처음 추가되는 피자일 경우
             this.pizza = new Pizza[pizzaCount]; // 배열 한칸 할당
             this.pizza[0] = pizzaInput; // 할당된 한칸에 피자 추가
@@ -20,6 +23,9 @@ public abstract class Order {
         }
     }
 
+    public void plusOrderIndex(){
+        orderIndex ++;
+    }
     public Pizza getPizza(int x){ // pizza 배열 한 칸에 접근하기 위한 getter
         return pizza[x - 1];
     }
@@ -40,15 +46,18 @@ public abstract class Order {
                 cnt++;
             }
             pizza = new Pizza[pizzaCount]; // 새로운 pizza 배열 할당
-            for(int i = 0 ; i < pizzaCount ; i++)
+            for(int i = 0 ; i < pizzaCount ; i++){
                 pizza[i] = pizzaTmp[i]; // 새로운 pizza에 임시 배열내 정보 복사
+                pizza[i].setPizzaIndex(i + 1);
+                pizza[i].setOrderIndex(orderIndex + 1);
+            }
         }
     }
     abstract public double calculateOrderPrice(); //abstract
     public String toString(){ // order의 가격, 피자 개수 출력 + 각 피자의 정보
         String result = "Price: $" + calculateOrderPrice() + ", " + Integer.toString(pizzaCount) + " pizzas\n";
         for(int i = 0 ; i < pizzaCount ; i++)
-            result = result + "Pizza " + Integer.toString(i+1) + ": " + pizza[i].toString() + "\n";
+            result = result + "Pizza " + pizza[i].getPizzaIndex() + ": " + pizza[i].toString() + "\n";
         
         return result;
     }

@@ -5,7 +5,7 @@ public class InStoreOrder extends Order {
     }
     public double calculateOrderPrice(){
         double result = 0;
-        for(int i = 0 ; i < pizzaCount ; i++)
+        for(int i = 0 ; i < getPizzaCount() ; i++)
             result += getPizza(i + 1).getPrice(); // 각 피자의 가격을 합산
         return result * 1.15; // 15% 팁 추가
     }

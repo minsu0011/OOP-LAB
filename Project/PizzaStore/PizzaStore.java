@@ -1,6 +1,9 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
-public class PizzaStore {
+public class PizzaStore implements Observer {
+    private ArrayList<PizzaOven> ovens; // PizzaOven 객체를 저장할 ArrayList
+    private ArrayList<Integer> pizzaCount; // 과거 Order들의 Pizza 개수 저장
     private double cash;
     private Order currentOrder;
     private int peperoniStock;
@@ -9,6 +12,7 @@ public class PizzaStore {
     private int tableNumber = 0; // main method에서 제어하는 tableNumber 필드
     private String address; // main method에서 입력받은 address 정보 임시 저장 필드
     public PizzaStore(double cash, int peperoniStock, int mushroomStock, int cheeseStock){ // 생성자, 각 필드값 초기화
+        pizzaCount = new ArrayList<>();
         this.cash = cash;
         this.peperoniStock = peperoniStock;
         this.mushroomStock = mushroomStock;
@@ -39,6 +43,19 @@ public class PizzaStore {
         if (currentOrder == null) return result; // Order가 없으면 그대로 리턴
         else return (result + "\nLast Order : \n" + currentOrder.toString()); // Order가 있으면 Order 내용도 추가
     }
+
+    public synchronized void update(int pizzaIndex, int orderIndex, int percentage){
+        System.out.println("(Order " + orderIndex +") Pizza " + pizzaIndex + " is " + percentage +"% done"); // 진행상황 출력
+        if(percentage == 100){ // 피자가 다 구워지면
+            int tmp = pizzaCount.get(orderIndex - 1) - 1; // 해당Order의 pizza--
+            pizzaCount.remove(orderIndex - 1);
+            pizzaCount.add(orderIndex - 1, tmp);
+            if(tmp == 0) // 해당 OrderIndex의 피자 개수 == 0 : 모든 피자가 구워짐
+                System.out.println("Order number " + orderIndex + " is done");
+        }
+    }
+
+
 
     public static void main(String[] args){
         String typeOfFile = null;
@@ -75,6 +92,15 @@ public class PizzaStore {
                 continue LOOP3;
             }
         }
+
+        pizzastore.ovens = new ArrayList<>(3); // PizzaOvens 객체 할당
+        pizzastore.ovens.add(new PizzaOven());
+        pizzastore.ovens.add(new PizzaOven());
+        pizzastore.ovens.add(new PizzaOven());
+        pizzastore.ovens.get(0).subscribe(pizzastore); // pizzastore를 구독자로 등록
+        pizzastore.ovens.get(1).subscribe(pizzastore);
+        pizzastore.ovens.get(2).subscribe(pizzastore);
+
         LOOPMAIN : // Order 생성, 재료 구매를 반복
         while(true){ // 작업을 계속 반복하기 위한 루프 (1, 2가 입력되지 않을시 루프 종료)
             System.out.println(pizzastore.toString()); // 잔고 및 재료 상황 출력
@@ -112,18 +138,9 @@ public class PizzaStore {
                     String scanc = scan.nextLine();
                     System.out.println("Do you want mushrooms on your pizza? Y/N");
                     String scanm = scan.nextLine();
-                    if(scanp.equals("y")){ 
-                	    p = true; // 재료 추가 정보 저장
-                	    pizzastore.peperoniStock --; // 재고에서 1개 삭제
-                    }
-                    if(scanc.equals("y")) {
-                	    c = true;
-                	    pizzastore.cheeseStock --;
-                    }
-                    if(scanm.equals("y")) {
-                	    m = true;
-                	    pizzastore.mushroomStock --;
-                    }
+                    if(scanp.equals("y")) p = true; // 재료 추가 정보 저장
+                    if(scanc.equals("y")) c = true;
+                    if(scanm.equals("y")) m = true;
                     pizzastore.AddPizzaToOrder(s, p, m, c);
                     System.out.printf("Added: One %dcm pizza ",s); // 피자 추가 완료 문구 출력
                     if(m == true || p == true || c == true) System.out.print("with"); // 하나라도 재료가 있으면 with 출력
@@ -157,11 +174,75 @@ public class PizzaStore {
                                 }
                                 else { // nothing이 입력되면 Order 수정 종료 및 확정 and 잔고에 추가 and LOOPMAIN으로 돌아감
                                     pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // 피자팔아 번 돈 추가
+                                    pizzastore.currentOrder.plusOrderIndex(); // OrderIndex ++
+                                    pizzastore.pizzaCount.add(pizzastore.currentOrder.getPizzaCount()); // pizza의 개수 저장
+                                    for(int i = 0 ; i < pizzastore.currentOrder.getPizzaCount() ; i++){ // 재고 정리
+                                        Pizza pizza = pizzastore.currentOrder.getPizza(i + 1);
+                                        if(pizza.getHasCheese()) pizzastore.cheeseStock--;
+                                        if(pizza.getHasMushrooms()) pizzastore.mushroomStock--;
+                                        if(pizza.getHasPeperoni()) pizzastore.peperoniStock--;
+                                    }
+
+                                    for(int i = 0 ; i < pizzastore.currentOrder.getPizzaCount() ; i++){ // 해당 order의 pizza 개수만큼 반복
+                                        int cnt = 0;
+                                        for(int j = 0 ; j < 3 ; j++){ // 오븐의 개수만큼 반복
+                                            if(pizzastore.ovens.get(j).getIsCooking()){ // 오븐이 비어있지 않다면
+                                                cnt++;
+                                                continue;
+                                            }
+                                            else{ // 오븐이 비어있다면
+                                                pizzastore.ovens.remove(j); // PizzaOven 객체를 삭제
+                                                pizzastore.ovens.add(j, new PizzaOven()); // 새로운 PizzaOven 객체를 할당
+                                                pizzastore.ovens.get(j).subscribe(pizzastore); // 구독자로 등록
+                                                pizzastore.ovens.get(j).setPizza(pizzastore.currentOrder.getPizza(i + 1)); // 피자 등록
+                                                pizzastore.ovens.get(j).setIsCooking(true); // isCooking  false->true
+                                                pizzastore.ovens.get(j).start(); // start THread
+                                                break; // escape j
+                                            }
+                                        }
+                                        if(cnt == 3){ // 비어있는 오븐이 없을 시
+                                            System.out.println("Ovens are full!");
+                                            System.out.println("Pizza(s) after Pizza " + (i + 1) + " will not be cooked in oven.."); // 해당 PIzza 부터는 Oven에 들어가지 않고 종료
+                                            break;
+                                        }
+                                    }
                                     break LOOP1;
                                 }
                             }
                             else{ // Order 수정 생각 없으면 Order 확정 및 잔고에 추가 and LOOPMAIN으로 돌아감 (break LOOP1)
                                 pizzastore.cash += pizzastore.currentOrder.calculateOrderPrice(); // 피자팔아 번 돈 추가
+                                pizzastore.currentOrder.plusOrderIndex(); // 위의 부분과 중복
+                                pizzastore.pizzaCount.add(pizzastore.currentOrder.getPizzaCount());
+                                for(int i = 0 ; i < pizzastore.currentOrder.getPizzaCount() ; i++){
+                                    Pizza pizza = pizzastore.currentOrder.getPizza(i + 1);
+                                    if(pizza.getHasCheese()) pizzastore.cheeseStock--;
+                                    if(pizza.getHasMushrooms()) pizzastore.mushroomStock--;
+                                    if(pizza.getHasPeperoni()) pizzastore.peperoniStock--;
+                                }
+
+                                for(int i = 0 ; i < pizzastore.currentOrder.getPizzaCount() ; i++){
+                                    int cnt = 0;
+                                    for(int j = 0 ; j < 3 ; j++){
+                                        if(pizzastore.ovens.get(j).getIsCooking()){
+                                            cnt++;
+                                            continue;
+                                        }
+                                        else{
+                                            pizzastore.ovens.remove(j);
+                                            pizzastore.ovens.add(j, new PizzaOven());
+                                            pizzastore.ovens.get(j).subscribe(pizzastore);
+                                            pizzastore.ovens.get(j).setPizza(pizzastore.currentOrder.getPizza(i + 1));
+                                            pizzastore.ovens.get(j).setIsCooking(true);
+                                            pizzastore.ovens.get(j).start();
+                                            break;
+                                        }
+                                    }
+                                    if(cnt == 3){ // 비어있는 오븐이 없을 시
+                                        System.out.println("Ovens are full!");
+                                        System.out.println("Pizza(s) after Pizza " + (i + 1) + " will not be cooked in oven..");
+                                        break;
+                                    }
+                                }
                                 break LOOP1;
                             } 
                         }

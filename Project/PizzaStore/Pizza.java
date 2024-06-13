@@ -1,5 +1,7 @@
 public class Pizza {
 
+    private int pizzaIndex;
+    private int orderIndex;
     private int size; //pizza 필드설정
     private boolean hasPeperoni;
     private boolean hasMushrooms;
@@ -12,6 +14,18 @@ public class Pizza {
         this.hasCheese = hasCheese;
     }
 
+    public void setPizzaIndex(int index){
+        this.pizzaIndex = index;
+    } 
+    public int getPizzaIndex(){
+        return pizzaIndex;
+    }
+    public void setOrderIndex(int index){
+        this.orderIndex = index;
+    }
+    public int getOrderIndex(){
+        return orderIndex;
+    }
     public int getSize(){ // private변수에 접근하기위한 getter 설정
         return size;
     }
