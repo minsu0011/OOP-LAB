@@ -2,12 +2,12 @@ public class Pizza {
 
     private int pizzaIndex;
     private int orderIndex;
-    private int size; //pizza ÇÊµå¼³Á¤
+    private int size; //pizza í•„ë“œì„¤ì •
     private boolean hasPeperoni;
     private boolean hasMushrooms;
     private boolean hasCheese;
     
-    public Pizza(int size, boolean hasPeperoni, boolean hasMushrooms, boolean hasCheese){ // »ı¼ºÀÚ
+    public Pizza(int size, boolean hasPeperoni, boolean hasMushrooms, boolean hasCheese){ // ìƒì„±ì
         this.size = size;
         this.hasPeperoni = hasPeperoni;
         this.hasMushrooms = hasMushrooms;
@@ -26,7 +26,7 @@ public class Pizza {
     public int getOrderIndex(){
         return orderIndex;
     }
-    public int getSize(){ // privateº¯¼ö¿¡ Á¢±ÙÇÏ±âÀ§ÇÑ getter ¼³Á¤
+    public int getSize(){ // privateë³€ìˆ˜ì— ì ‘ê·¼í•˜ê¸°ìœ„í•œ getter ì„¤ì •
         return size;
     }
     public boolean getHasPeperoni(){
@@ -39,7 +39,7 @@ public class Pizza {
         return hasCheese;
     }
 
-    public String toString(){ // »çÀÌÁî, Àç·áµé, °¡°İ String ¸®ÅÏ
+    public String toString(){ // ì‚¬ì´ì¦ˆ, ì¬ë£Œë“¤, ê°€ê²© String ë¦¬í„´
         String result = Integer.toString(size) + "cm, peperoni: ";
         if(hasPeperoni == true) result = result + "yes, mushrooms: ";
         else result = result + "no, mushrooms: ";
@@ -51,7 +51,7 @@ public class Pizza {
         return result;
     }
     
-    public double getPrice(){ // ÇÇÀÚÀÇ °¡°İÀ» °è»êÇÏ°í ¸®ÅÏ
+    public double getPrice(){ // í”¼ìì˜ ê°€ê²©ì„ ê³„ì‚°í•˜ê³  ë¦¬í„´
         int cnt = 0;
         double result = 0;
         if(hasPeperoni == true) cnt++;

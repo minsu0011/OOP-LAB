@@ -37,9 +37,9 @@ public class Account{
     }
 
     public String toString(){
-        String a; //convertedDate << Çü½Ä ¹Ù²Ù¾î¼­ Ãâ·Â
+        String a; //convertedDate << í˜•ì‹ ë°”ê¾¸ì–´ì„œ ì¶œë ¥
         String convertedDate = created.format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
-        a = "ÀÌ¸§ : " + this.name + " ¿¬ÀÌÀÚ : " + String.valueOf(this.yearlyInterest) + " ÀÜ°í : " + String.valueOf(this.balance) + " °¡ÀÔÀÏ : " + convertedDate; 
+        a = "ì´ë¦„ : " + this.name + " ì—°ì´ìž : " + String.valueOf(this.yearlyInterest) + " ìž”ê³  : " + String.valueOf(this.balance) + " ê°€ìž…ì¼ : " + convertedDate; 
         return a;
     }
 }

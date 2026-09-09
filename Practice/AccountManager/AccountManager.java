@@ -4,35 +4,35 @@ public class AccountManager {
     public static void main(String[] args){
         int cnt = 0;
         int flag = 0;
-        LocalDate created = LocalDate.of(2021,12,01); //»ı¼ºµÈ ³¯Â¥
+        LocalDate created = LocalDate.of(2021,12,01); //ìƒì„±ëœ ë‚ ì§œ
         int year = 2021;
         int month = 12;
         int day = 01;
-        Account account = new Account("Jeon", 5, created); //°èÁÂ »ı¼º
-        System.out.println(account.toString()); //Ã³À½Á¤º¸ Ãâ·Â
-        while(account.getBalance() <= 10000){ // ¹İº¹¹® ¼öÇà
-            cnt++; // ÇÑ´ŞÀÌ Áö³¯¶§¸¶´Ù Ä«¿îÆ®
-            month++; // ÇÑ´Ş Áõ°¡
-            if(month >= 13){ // 12¿ù ´ÙÀ½ 1¿ù·Î ³Ñ¾î°¡±â
+        Account account = new Account("Jeon", 5, created); //ê³„ì¢Œ ìƒì„±
+        System.out.println(account.toString()); //ì²˜ìŒì •ë³´ ì¶œë ¥
+        while(account.getBalance() <= 10000){ // ë°˜ë³µë¬¸ ìˆ˜í–‰
+            cnt++; // í•œë‹¬ì´ ì§€ë‚ ë•Œë§ˆë‹¤ ì¹´ìš´íŠ¸
+            month++; // í•œë‹¬ ì¦ê°€
+            if(month >= 13){ // 12ì›” ë‹¤ìŒ 1ì›”ë¡œ ë„˜ì–´ê°€ê¸°
                 year++;
                 month = 1;
             }
-            account.receiveIncome(100); // 100 Ãß°¡
-            account.receiveInterest(); // ÀÌÀÚ ¹ŞÀ½
+            account.receiveIncome(100); // 100 ì¶”ê°€
+            account.receiveInterest(); // ì´ì ë°›ìŒ
             
-            if((cnt / 12) >= 1 && month == 1){ // ÀÌº¥Æ® ¼öÇà
-                if((int)(Math.random()*10) % 10 == 1){ // 0~9 ·£´ı¼ö»ı¼º 10%È®·ü
-                    System.out.println("ÀÌº¥Æ® ´çÃ·!");
-                    account.receiveIncome(100); // ´çÃ·±İ ¼ö·É
+            if((cnt / 12) >= 1 && month == 1){ // ì´ë²¤íŠ¸ ìˆ˜í–‰
+                if((int)(Math.random()*10) % 10 == 1){ // 0~9 ëœë¤ìˆ˜ìƒì„± 10%í™•ë¥ 
+                    System.out.println("ì´ë²¤íŠ¸ ë‹¹ì²¨!");
+                    account.receiveIncome(100); // ë‹¹ì²¨ê¸ˆ ìˆ˜ë ¹
                 }
             }
-            if(cnt % 36 == 0 && flag == 0){ // 3³âµÚ ÇÑ¹ø ÀÌÀÚÀ² ÀÎ»ó
-                System.out.println("°¡ÀÔ ÈÄ 3³âÀÌ Áö³ª¼­ ÀÌÀÚÀ²ÀÌ 2% ÀÎ»óµÇ¾ú½À´Ï´Ù");
+            if(cnt % 36 == 0 && flag == 0){ // 3ë…„ë’¤ í•œë²ˆ ì´ììœ¨ ì¸ìƒ
+                System.out.println("ê°€ì… í›„ 3ë…„ì´ ì§€ë‚˜ì„œ ì´ììœ¨ì´ 2% ì¸ìƒë˜ì—ˆìŠµë‹ˆë‹¤");
                 flag = 1;
                 account.increaseYearlyInterest(2);
             }
         }
-        String result = account.toString() + ", 1¾ï ¸ğÀ¸±â ³¡ : ";
+        String result = account.toString() + ", 1ì–µ ëª¨ìœ¼ê¸° ë : ";
         System.out.printf("%s%d-%d-%d", result, year, month, day);
     }
 }

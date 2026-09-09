@@ -1,60 +1,60 @@
 public abstract class Order {
-    private Pizza[] pizza; // ÇÇÀÚ
+    private Pizza[] pizza; // í”¼ìž
     private static int orderIndex = 0;
-    private int pizzaCount = 0; // ¿À´õ ´ç ÇÇÀÚ °¹¼ö(Ãß°¡)
-    public Order(){} // »ý¼ºÀÚ
+    private int pizzaCount = 0; // ì˜¤ë” ë‹¹ í”¼ìž ê°¯ìˆ˜(ì¶”ê°€)
+    public Order(){} // ìƒì„±ìž
     public void addPizza(Pizza pizza){ 
-        pizzaCount++; // ÇÇÀÚ °³¼ö Áõ°¡
-        Pizza pizzaInput = new Pizza(pizza.getSize(), pizza.getHasPeperoni(), pizza.getHasMushrooms(), pizza.getHasCheese()); //Ãß°¡ÇÒ ÇÇÀÚ Á¤º¸ ÀÓ½Ã º¯¼ö¿¡ ÀúÀå
-        pizzaInput.setPizzaIndex(pizzaCount); // pizzaIndex ¼³Á¤
-        pizzaInput.setOrderIndex(orderIndex + 1); // orderIndex ¼³Á¤
-        if(pizzaCount == 1){ // Ã³À½ Ãß°¡µÇ´Â ÇÇÀÚÀÏ °æ¿ì
-            this.pizza = new Pizza[pizzaCount]; // ¹è¿­ ÇÑÄ­ ÇÒ´ç
-            this.pizza[0] = pizzaInput; // ÇÒ´çµÈ ÇÑÄ­¿¡ ÇÇÀÚ Ãß°¡
+        pizzaCount++; // í”¼ìž ê°œìˆ˜ ì¦ê°€
+        Pizza pizzaInput = new Pizza(pizza.getSize(), pizza.getHasPeperoni(), pizza.getHasMushrooms(), pizza.getHasCheese()); //ì¶”ê°€í•  í”¼ìž ì •ë³´ ìž„ì‹œ ë³€ìˆ˜ì— ì €ìž¥
+        pizzaInput.setPizzaIndex(pizzaCount); // pizzaIndex ì„¤ì •
+        pizzaInput.setOrderIndex(orderIndex + 1); // orderIndex ì„¤ì •
+        if(pizzaCount == 1){ // ì²˜ìŒ ì¶”ê°€ë˜ëŠ” í”¼ìžì¼ ê²½ìš°
+            this.pizza = new Pizza[pizzaCount]; // ë°°ì—´ í•œì¹¸ í• ë‹¹
+            this.pizza[0] = pizzaInput; // í• ë‹¹ëœ í•œì¹¸ì— í”¼ìž ì¶”ê°€
         }
-        else if(pizzaCount >= 2){ // Ãß°¡ÇÒ ÇÇÀÚ ÀÌ¿Ü¿¡ ±âÁ¸¿¡ ÇÇÀÚ°¡ Á¸ÀçÇÒ °æ¿ì
-            Pizza[] pizzaTmp = new Pizza[pizzaCount - 1]; // ÀÓ½Ã ¹è¿­ »ý¼º(ÇÇÀÚ °³¼ö-1)
+        else if(pizzaCount >= 2){ // ì¶”ê°€í•  í”¼ìž ì´ì™¸ì— ê¸°ì¡´ì— í”¼ìžê°€ ì¡´ìž¬í•  ê²½ìš°
+            Pizza[] pizzaTmp = new Pizza[pizzaCount - 1]; // ìž„ì‹œ ë°°ì—´ ìƒì„±(í”¼ìž ê°œìˆ˜-1)
             for(int i = 0 ; i < pizzaCount - 1 ; i++) 
-                pizzaTmp[i] = this.pizza[i]; // ÀÓ½Ã ¹è¿­¿¡ ±âÁ¸ÀÇ ÇÇÀÚ Á¤º¸µé º¹»ç
-            this.pizza = new Pizza[pizzaCount]; // »õ·Ó¿î pizza ¹è¿­ »ý¼º ¹× ÇÇÀÚ °³¼ö¸¸Å­ ÇÒ´ç
+                pizzaTmp[i] = this.pizza[i]; // ìž„ì‹œ ë°°ì—´ì— ê¸°ì¡´ì˜ í”¼ìž ì •ë³´ë“¤ ë³µì‚¬
+            this.pizza = new Pizza[pizzaCount]; // ìƒˆë¡­ìš´ pizza ë°°ì—´ ìƒì„± ë° í”¼ìž ê°œìˆ˜ë§Œí¼ í• ë‹¹
             for(int i = 0 ; i < pizzaCount - 1 ; i++)
-                this.pizza[i] = pizzaTmp[i]; // ÀÓ½Ã ¹è¿­¿¡ ÀúÀåµÇ¾î ÀÖ´Â ±âÁ¸ ÇÇÀÚ Á¤º¸µé »õ·Ó°Ô ÇÒ´çÇÑ ¹è¿­ pizza¿¡ º¹»ç
-            this.pizza[pizzaCount - 1] = pizzaInput; // »õ·Ó°Ô Ãß°¡ÇÒ ÇÇÀÚ Á¤º¸ ÀúÀå
+                this.pizza[i] = pizzaTmp[i]; // ìž„ì‹œ ë°°ì—´ì— ì €ìž¥ë˜ì–´ ìžˆëŠ” ê¸°ì¡´ í”¼ìž ì •ë³´ë“¤ ìƒˆë¡­ê²Œ í• ë‹¹í•œ ë°°ì—´ pizzaì— ë³µì‚¬
+            this.pizza[pizzaCount - 1] = pizzaInput; // ìƒˆë¡­ê²Œ ì¶”ê°€í•  í”¼ìž ì •ë³´ ì €ìž¥
         }
     }
 
     public void plusOrderIndex(){
         orderIndex ++;
     }
-    public Pizza getPizza(int x){ // pizza ¹è¿­ ÇÑ Ä­¿¡ Á¢±ÙÇÏ±â À§ÇÑ getter
+    public Pizza getPizza(int x){ // pizza ë°°ì—´ í•œ ì¹¸ì— ì ‘ê·¼í•˜ê¸° ìœ„í•œ getter
         return pizza[x - 1];
     }
-    public int getPizzaCount(){ // pizzaÀÇ °³¼ö getter
+    public int getPizzaCount(){ // pizzaì˜ ê°œìˆ˜ getter
         return pizzaCount;
     }
 
     public void removePizza(int index){
-        pizzaCount--; // ÇÇÀÚ°³¼ö °¨¼Ò
-        if(pizzaCount == 0) // ÇÇÀÚ°¡ ¾øÀ¸¸é pizza¹è¿­ null·Î ÃÊ±âÈ­
+        pizzaCount--; // í”¼ìžê°œìˆ˜ ê°ì†Œ
+        if(pizzaCount == 0) // í”¼ìžê°€ ì—†ìœ¼ë©´ pizzaë°°ì—´ nullë¡œ ì´ˆê¸°í™”
             pizza = null;
-        else if(pizzaCount >= 1){ // ÇÇÀÚ°¡ ÀÖÀ¸¸é
-            Pizza[] pizzaTmp = new Pizza[pizzaCount]; // ÀÓ½Ã ¹è¿­ »ý¼º
+        else if(pizzaCount >= 1){ // í”¼ìžê°€ ìžˆìœ¼ë©´
+            Pizza[] pizzaTmp = new Pizza[pizzaCount]; // ìž„ì‹œ ë°°ì—´ ìƒì„±
             int cnt = 0;
             for(int i = 0 ; i < pizzaCount + 1 ; i++){
-                if(i == index) continue; // ÇØ´ç index ÇÇÀÚÁ¤º¸ º¹»çÇÏÁö ¾ÊÀ½
-                else pizzaTmp[cnt] = pizza[i]; // ÀÓ½Ã ¹è¿­¿¡ ÇÇÀÚ Á¤º¸ º¹»ç
+                if(i == index) continue; // í•´ë‹¹ index í”¼ìžì •ë³´ ë³µì‚¬í•˜ì§€ ì•ŠìŒ
+                else pizzaTmp[cnt] = pizza[i]; // ìž„ì‹œ ë°°ì—´ì— í”¼ìž ì •ë³´ ë³µì‚¬
                 cnt++;
             }
-            pizza = new Pizza[pizzaCount]; // »õ·Î¿î pizza ¹è¿­ ÇÒ´ç
+            pizza = new Pizza[pizzaCount]; // ìƒˆë¡œìš´ pizza ë°°ì—´ í• ë‹¹
             for(int i = 0 ; i < pizzaCount ; i++){
-                pizza[i] = pizzaTmp[i]; // »õ·Î¿î pizza¿¡ ÀÓ½Ã ¹è¿­³» Á¤º¸ º¹»ç
+                pizza[i] = pizzaTmp[i]; // ìƒˆë¡œìš´ pizzaì— ìž„ì‹œ ë°°ì—´ë‚´ ì •ë³´ ë³µì‚¬
                 pizza[i].setPizzaIndex(i + 1);
                 pizza[i].setOrderIndex(orderIndex + 1);
             }
         }
     }
     abstract public double calculateOrderPrice(); //abstract
-    public String toString(){ // orderÀÇ °¡°Ý, ÇÇÀÚ °³¼ö Ãâ·Â + °¢ ÇÇÀÚÀÇ Á¤º¸
+    public String toString(){ // orderì˜ ê°€ê²©, í”¼ìž ê°œìˆ˜ ì¶œë ¥ + ê° í”¼ìžì˜ ì •ë³´
         String result = "Price: $" + calculateOrderPrice() + ", " + Integer.toString(pizzaCount) + " pizzas\n";
         for(int i = 0 ; i < pizzaCount ; i++)
             result = result + "Pizza " + pizza[i].getPizzaIndex() + ": " + pizza[i].toString() + "\n";
