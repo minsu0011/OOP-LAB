@@ -1,6 +1,3 @@
-# 확인한 범위
+# 테스트와 실행 범위
 
-PizzaStore Java source들을 javac로 컴파일했습니다. CP949로 저장돼 있던 일부 파일은 텍스트 내용을 유지해 UTF-8로 통일한 뒤 성공했습니다. 대화형 주문과 동시성 테스트는 별도입니다.
-
-재학습이나 새로운 봉인검증을 이 코드 정리 과정에서 수행하지 않았습니다. 작은 smoke test와 모델 일반화 성능은 별개입니다.
-
+PizzaStore는 `javac -encoding UTF-8 -d build Project/PizzaStore/*.java`로 컴파일합니다. 대화형 입력·파일 저장·동시성 경계는 실행 시 별도로 확인합니다. Practice는 예제별로 컴파일합니다.

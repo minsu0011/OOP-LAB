@@ -1,4 +1,5 @@
-# Responsibilities
-Pizza/Order는 주문 상태, OnlineOrder/InStoreOrder는 주문 종류, PizzaOven은 처리 자원, Observer/Observable은 상태 알림, IFileHandler/CSVHandler/TXTHandler는 저장 포맷 역할입니다.
-Practice는 별도 실행 단위입니다. 클래스 이름 충돌을 피하기 위해 각 예제를 독립적으로 컴파일하세요. 게시 테스트는 PizzaStore compilation에 한정하며 interactive 입력과 파일/동시성 회귀 전체를 보증하지 않습니다.
+# 객체별 책임
 
+Pizza·Order는 주문 상태, OnlineOrder·InStoreOrder는 주문 방식, PizzaOven은 조리 자원입니다. Observer·Observable은 상태 알림을, IFileHandler·CSVHandler·TXTHandler는 저장 형식을 분리합니다.
+
+`Practice` 예제는 독립 실행 단위입니다. 같은 클래스 이름이 겹칠 수 있어 각각 컴파일합니다. 파일 저장과 공유 상태를 함께 다룰 때는 경로·예외 처리·동기화까지 확인해야 합니다.
