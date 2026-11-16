@@ -24,3 +24,5 @@ javac -encoding UTF-8 -d build Project/PizzaStore/*.java
 실행할 `main`과 package는 각 소스에서 확인합니다. Practice 예제는 같은 클래스 이름을 사용할 수 있으므로 따로 컴파일합니다.
 
 [구현 노트](docs/implementation.md) · [소스 목록](docs/source-index.csv) · [출처](ATTRIBUTION.md)
+
+[전체 문서 안내](docs/README.md)
